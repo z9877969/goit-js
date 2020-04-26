@@ -5,7 +5,6 @@ const taskTwo = document.createElement("div");
 taskTwo.setAttribute("id", "task-02");
 body.append(taskTwo);
 
-// ======= do task ========
 const createDomElement = ({
   tagName,
   classNameArr,
@@ -89,9 +88,9 @@ const boxes = createDomElement(setBoxes);
 
 taskTwo.append(boxes);
 
-const randomValue = () => Math.ceil(Math.random() * 255);
-const randomColor = () =>
-  `rgb(${randomValue()}, ${randomValue()}, ${randomValue()})`;
+const getRandomValue = () => Math.ceil(Math.random() * 255);
+const getRandomColor = () =>
+  `rgb(${getRandomValue()}, ${getRandomValue()}, ${getRandomValue()})`;
 
 const createBoxes = (amount) => {
   boxes.children.length > 0 && destroyBoxes();
@@ -99,7 +98,7 @@ const createBoxes = (amount) => {
     let boxSet = {
       tagName: "div",
       atributesObj: {
-        style: `background: ${randomColor()}; width: ${
+        style: `background: ${getRandomColor()}; width: ${
           30 + i * 10
         }px; height: ${30 + i * 10}px`,
       },
@@ -114,9 +113,8 @@ const destroyBoxes = () => [...boxes.children].forEach((el) => el.remove());
 // handlers
 const handlerButton = (e) => {
   const { action } = e.target.dataset;
-  const { children } = e.currentTarget;
-  if (action === "create") {
-    const input = [...children].find((el) => el.nodeName === "INPUT");
+
+  if (action === "create" && input.value) {
     const amount = input.valueAsNumber;
 
     createBoxes(amount);

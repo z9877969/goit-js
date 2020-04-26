@@ -1,14 +1,14 @@
 "use strict";
 
 const StringBuilder = class {
-  // constructor(baseString = "") {
-  //   this.value = baseString;
-  // }
-  static message = 5;
-
-  #f() {
-    return this.value;
+  constructor(baseString = "") {
+    this.value = baseString;
   }
+  // static message = 5;
+
+  // #f() {
+  //   return this.value;
+  // }
 };
 
 StringBuilder.prototype.append = function (str) {

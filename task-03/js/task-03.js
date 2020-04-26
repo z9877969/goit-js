@@ -1,9 +1,14 @@
+"use strict";
+
+// body
 const body = document.querySelector("body");
+body.setAttribute("style", "margin: 0;");
+
+// task container
 const taskThree = document.createElement("div");
 taskThree.setAttribute("id", "task-03");
 body.append(taskThree);
 
-// do task
 const createDomElement = ({
   tagName,
   classNameArr,
@@ -41,7 +46,8 @@ const setForm = {
   tagName: "form",
   atributesObj: {
     id: "search-form",
-    style: "position: fixed",
+    style:
+      "position: fixed; width: 100vw; height: 31px; padding-top: 10px; background: rgb(26, 21, 21);",
   },
 };
 const form = createDomElement(setForm);
@@ -62,7 +68,10 @@ form.append(input);
 
 // ===list
 const list = document.createElement("ul");
-list.setAttribute("style", "list-style: none; padding-top: 30px");
+list.setAttribute(
+  "style",
+  "list-style: none; width: 640px; margin: 0 auto; padding-top: 46px; cursor: pointer; "
+);
 
 // =item wrapper
 const getItem = (imgSmallUrl, imgLargeUrl, imgDescr) => {
@@ -72,6 +81,7 @@ const getItem = (imgSmallUrl, imgLargeUrl, imgDescr) => {
   // =link
   const link = document.createElement("a");
   link.setAttribute("href", `${imgLargeUrl}`);
+  link.setAttribute("style", "pointer-events: none;");
   item.append(link);
 
   // =img
@@ -103,6 +113,7 @@ const getImgData = (data) => {
   return imgData;
 };
 
+// fetch
 const URL = "https://pixabay.com/api/?key=13965574-3ae6669f35304ffc6cddc1b72";
 
 let query = "";
@@ -126,9 +137,10 @@ const fetchPictureList = (query, page, per_page) => {
       })
       .then(() => {
         node = document.querySelector("li:last-child img");
-        node.onload = function () {
+        node.onload = () => {
           handlerAutoScroll();
         };
+        handlerModalLargeImg();
       })
       .catch((err) =>
         taskThree.insertAdjacentHTML(
@@ -178,26 +190,23 @@ const handlerAutoScroll = () => {
   observer.observe(target);
 };
 
-// const handlerDisplayForm = () => {
-//   const options = {
-//     root: null,
-//     rootMargin: "0px ",
-//     threshold: 0.1,
-//   };
+const handlerModalLargeImg = () => {
+  if (list.childNodes.length <= per_page) {
+    document.querySelector("ul").onclick = ({ target }) => {
+      const link = target.firstChild;
+      link.setAttribute("style", "pointer-events: none;");
+      const { href } = link;
 
-// //   const target = node;
-
-//   const callback = (entries, observer) => {
-//     entries.forEach((entry, arr) => {
-//       if (entry.isIntersecting) {
-//         observer.unobserve(entry.target);
-//         page++;
-//       }
-//     });
-//   };
-//   const observer = new IntersectionObserver(callback, options);
-//   observer.observe(target);
-// };
+      basicLightbox
+        .create(
+          `
+    <img src=${href}>
+  `
+        )
+        .show();
+    };
+  }
+};
 
 // listeners
 form.addEventListener("submit", handlerSubmit);
