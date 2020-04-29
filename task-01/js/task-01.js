@@ -1,11 +1,14 @@
-"use strict";
+// "use strict";
 
-const StringBuilder = class {
+const StringBuilder = class StringBuilder {
   constructor(baseString = "") {
     this.value = baseString;
-    () => "func".call(this);
+    // this.toString.call(this);
+    // return this.value.toString();
   }
 };
+
+// StringBuilder.prototype.advValue = "";
 
 StringBuilder.prototype.append = function (str) {
   this.value = this.value + str;
@@ -22,7 +25,44 @@ StringBuilder.prototype.pad = function (str) {
   return this;
 };
 
+// StringBuilder.prototype.toString = function toStringValue() {
+//   console.log("toString");
+//   return this.value;
+// };
+// StringBuilder.prototype.valueOf = function toValueOf() {
+//   console.log("valueOf");
+//   return this.value;
+// };
+
+// console.log = function (s) {
+//   console.log(s + "");
+// };
+
+const ToPrimitive = {
+  [Symbol.toPrimitive](hint) {
+    switch (hint) {
+      case "number":
+        return this.value.valueOf();
+      case "string":
+      default:
+        return this.value.toString();
+    }
+  },
+  valueOf() {
+    return this.num;
+  },
+  toString() {
+    return this.value;
+  },
+};
+
+StringBuilder.prototype = Object.create(ToPrimitive);
+
+// console.log = (a) => {};
+
 const builder = new StringBuilder(".");
 builder.append("^").prepend("^").pad("=");
 
-console.log(builder.value);
+alert(builder);
+console.log(builder);
+console.log([Symbol.toPrimitive]);
